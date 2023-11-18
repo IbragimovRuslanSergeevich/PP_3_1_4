@@ -1,32 +1,92 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>User page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
-<h2>Details about user:</h2>
 
-<th:block>
-    <table>
-        <tr>
-            <td><b>Name:</b></td>
-            <td th:text = "${user.getName()}"></td>
-        </tr>
-        <tr>
-            <td><b>Surname:</b></td>
-            <td th:text = "${user.getSurname()}"></td>
-        </tr>
-        <tr>
-            <td><b>Age:</b></td>
-            <td th:text = "${user.getAge()}"></td>
-        </tr>
-    </table>
-</th:block>
+<body class="bg-light">
+<nav class="navbar bg-dark text-white">
+    <div class="container-fluid">
+        <a class="navbar-brand">
+            <b><span th:text="*{user.getUsername()}"></span></b>
+            <span th:text="' with roles: '"></span>
 
-<br>
-<a th:href="@{/logout}">Logout</a>
+            <th:block th:each="user : ${user.getRoles()}">
+                <span th:text="${user.toString()}"></span>
+            </th:block>
+        </a>
+        <form method="post" th:action="@{/logout}">
+            <button type="submit" class="btn btn-dark text-secondary">
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
 <br>
 
+<div class="container-fluid">
+    <div class="row" style="height: 100vh">
+        <div class="col-md-2 bg-white">
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" th:each="role: ${user.getRoles()}" th:if="${role.toString()}=='ADMIN'"
+                       th:href="@{/admin}">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/user}">User </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-10">
+            <h1>User information-page</h1>
+            <div class="card">
+                <h5 class="card-header bg-light">About user</h5>
+                <div class="card-body">
+                    <table class="table table-striped bg-white">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Age</th>
+                            <th>Username</th>
+                            <th>Role</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <td th:text="${user.getId()}"></td>
+                        <td th:text="${user.getName()}"></td>
+                        <td th:text="${user.getSurname()}"></td>
+                        <td th:text="${user.getAge()}"></td>
+                        <td th:text="${user.getUsername()}"></td>
+                        <td>
+                            <th:block th:each="user : ${user.getRoles()}">
+                                <span th:text="${user.toString()}"></span>
+                            </th:block>
+                        </td>
+
+
+
+
+
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+                                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+                                crossorigin="anonymous"></script>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

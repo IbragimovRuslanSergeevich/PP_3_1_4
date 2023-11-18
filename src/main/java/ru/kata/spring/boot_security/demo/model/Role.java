@@ -49,4 +49,9 @@ public class Role implements GrantedAuthority {
     public String getAuthority() {
         return getRoleType();
     }
+
+    @Override
+    public String toString() {
+        return roleType.replaceAll("ROLE_", "");
+    }
 }

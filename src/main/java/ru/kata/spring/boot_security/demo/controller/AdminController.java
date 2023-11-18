@@ -8,6 +8,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -22,43 +23,45 @@ public class AdminController {
     }
 
     @GetMapping
-    public String show(Model model) {
+    public String show(Model model, Principal principal) {
         model.addAttribute("users", userService.getUsersList());
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        model.addAttribute("rolesOfUser", roleService.getRolesList());
         return "admin";
     }
+//
+//    @GetMapping(params = "id")
+//    public String showIdUser(@RequestParam(value = "id") long id, Model model) {
+//        model.addAttribute("user", userService.getUser(id));
+//        return "id_user";
+//    }
+//
+//    @GetMapping("/new")
+//    public String newUser(Model model, @ModelAttribute("user") User user) {
+//        model.addAttribute("rolesOfUser", roleService.getRolesList());
+//        return "new";
+//    }
 
-    @GetMapping(params = "id")
-    public String showIdUser(@RequestParam(value = "id") long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        return "id_user";
-    }
-
-    @GetMapping("/new")
-    public String newUser(Model model, @ModelAttribute("user") User user) {
-        model.addAttribute("rolesOfUser", roleService.getRolesList());
-        return "new";
-    }
-
-    @PostMapping
+    @PostMapping("/new")
     public String createUser(@ModelAttribute("user") @Valid User user) {
         userService.addUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/delete")
-    public String deleteUser(@RequestParam(value = "id") long id) {
+    @GetMapping("/{id}")
+    public String deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit")
-    public String editUserForm(Model model, @RequestParam("id") long id) {
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute("rolesOfUser", roleService.getRolesList());
-        return "edit";
-    }
+//    @GetMapping("/edit")
+//    public String editUserForm(Model model, @RequestParam("id") long id) {
+//        model.addAttribute("user", userService.getUser(id));
+//        model.addAttribute("rolesOfUser", roleService.getRolesList());
+//        return "redirect:/admin";
+//    }
 
-    @PostMapping("/edit{id}")
+    @PostMapping("/{id}")
     public String editUser(@ModelAttribute("user") @Valid User user) {
         userService.editUser(user);
         return "redirect:/admin";
