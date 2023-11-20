@@ -2,7 +2,11 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -29,18 +33,7 @@ public class AdminController {
         model.addAttribute("rolesOfUser", roleService.getRolesList());
         return "admin";
     }
-//
-//    @GetMapping(params = "id")
-//    public String showIdUser(@RequestParam(value = "id") long id, Model model) {
-//        model.addAttribute("user", userService.getUser(id));
-//        return "id_user";
-//    }
-//
-//    @GetMapping("/new")
-//    public String newUser(Model model, @ModelAttribute("user") User user) {
-//        model.addAttribute("rolesOfUser", roleService.getRolesList());
-//        return "new";
-//    }
+
 
     @PostMapping("/new")
     public String createUser(@ModelAttribute("user") @Valid User user) {
@@ -54,12 +47,6 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @GetMapping("/edit")
-//    public String editUserForm(Model model, @RequestParam("id") long id) {
-//        model.addAttribute("user", userService.getUser(id));
-//        model.addAttribute("rolesOfUser", roleService.getRolesList());
-//        return "redirect:/admin";
-//    }
 
     @PostMapping("/{id}")
     public String editUser(@ModelAttribute("user") @Valid User user) {
